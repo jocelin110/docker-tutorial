@@ -19,6 +19,7 @@
 * [目錄](https://github.com/twtrubiks/docker-tutorial/tree/master/docker-env-tutorial) - [Youtube Tutorial - Docker 基本教學 - 在 docker compose 中善用 Environment variables](https://youtu.be/JwbI1aNKbtY)
 * [目錄](https://github.com/twtrubiks/docker-tutorial#%E5%A6%82%E4%BD%95%E6%B8%85%E9%99%A4-docker-container-log) - [Youtube Tutorial - 如何清除 Docker container log](https://youtu.be/SiG0tmwhqqg)
 * [目錄](https://github.com/twtrubiks/docker-tutorial#json-file-logging-driver) - [Youtube Tutorial - Docker 中的 JSON File logging driver(container log)](https://youtu.be/wb9bONgnFn4)
+* [目錄](https://github.com/twtrubiks/docker-tutorial#health-check) - Health Check
 
 ## 簡介
 
@@ -1690,6 +1691,68 @@ docker inspect --format '{{.HostConfig.LogConfig}}' CONTAINER
 ![alt tag](https://i.imgur.com/L6Z7bYX.png)
 
 這樣設定完之後, 就不用再擔心 container log 吃掉大量的容量了:smile:
+
+## Health Check
+
+直接來看一個範例 [docker-compose.yml](https://github.com/twtrubiks/odoo-docker-tutorial/blob/15.0/docker-compose.yml)
+
+```yml
+version: '3.5'
+services:
+  web:
+    image: odoo:15.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    healthcheck:
+      test: curl -fs http://localhost:8069/web/database/selector || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./addons:/mnt/extra-addons
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+
+volumes:
+  odoo-web-data:
+  odoo-db-data:
+```
+
+當執行時, 你會發現多了一個 `health: starting` 如下圖,
+
+![alt tag](https://i.imgur.com/j4TBQ7M.png)
+
+當(每)過了 10 秒 (`interval: 10s`) 之後, 如果順利啟動會變成 `(healthy)` 如下圖,
+
+![alt tag](https://i.imgur.com/g8ysqZ0.png)
+
+當(每)過了 10 秒之後, 如果連續失敗很多次 (`retries: 5`),
+
+則會顯示 `(unhealthy)` 如下圖,
+
+![alt tag](https://i.imgur.com/zJhJf6u.png)
+
+docker 的 Health Check 會回傳你數字,
+
+0 代表成功，container is healthy
+
+1 代表失敗，假設失敗超過指定次數(`retries: 5`), container is unhealthy
 
 ## 後記：
 
