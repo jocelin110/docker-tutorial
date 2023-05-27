@@ -11,15 +11,15 @@
 
 其他說明
 
-* [Youtube Tutorial-Ubuntu(Linux) 如何安裝 docker](https://youtu.be/eS_HMBC_RaA)
-* [目錄](https://github.com/twtrubiks/docker-tutorial#docker-compose-networks) - [Youtube Tutorial-docker-compose networks 說明](https://youtu.be/wmV9WfkpyGk)
-* [目錄](https://github.com/twtrubiks/docker-tutorial#docker-container-%E5%85%A7%E5%A6%82%E4%BD%95%E9%80%A3%E6%8E%A5%E5%88%B0%E6%9C%AC%E6%A9%9F-localhost-%E6%9C%8D%E5%8B%99) - Docker container 內如何連接到本機 localhost 服務
-* [目錄](https://github.com/twtrubiks/docker-tutorial#docker-compose-updown-%E5%92%8C-restart-%E7%9A%84%E5%B7%AE%E7%95%B0) - [Youtube Tutorial-docker-compose up/down 和 restart 的差異](https://youtu.be/nX-sbLPz-MU)
-* [目錄](https://github.com/twtrubiks/docker-tutorial/tree/master/docker-auto-run-linux) - [Youtube Tutorial-Linux 教學-開機自動啟動 docker / compose](https://youtu.be/c4YIQHCDLnQ)
+* [Youtube Tutorial - Ubuntu(Linux) 如何安裝 docker](https://youtu.be/eS_HMBC_RaA)
+* [目錄](https://github.com/twtrubiks/docker-tutorial#docker-compose-networks) - [Youtube Tutorial - docker-compose networks 說明](https://youtu.be/wmV9WfkpyGk)
+* [目錄](https://github.com/twtrubiks/docker-tutorial#docker-container-%E5%85%A7%E5%A6%82%E4%BD%95%E9%80%A3%E6%8E%A5%E5%88%B0%E6%9C%AC%E6%A9%9F-localhost-%E6%9C%8D%E5%8B%99) - [Youtube Tutorial - (等待新增)Docker container 內如何連接到本機 localhost 服務]()
+* [目錄](https://github.com/twtrubiks/docker-tutorial#docker-compose-updown-%E5%92%8C-restart-%E7%9A%84%E5%B7%AE%E7%95%B0) - [Youtube Tutorial - docker-compose up/down 和 restart 的差異](https://youtu.be/nX-sbLPz-MU)
+* [目錄](https://github.com/twtrubiks/docker-tutorial/tree/master/docker-auto-run-linux) - [Youtube Tutorial - Linux 教學 - 開機自動啟動 docker / compose](https://youtu.be/c4YIQHCDLnQ)
 * [目錄](https://github.com/twtrubiks/docker-tutorial/tree/master/docker-env-tutorial) - [Youtube Tutorial - Docker 基本教學 - 在 docker compose 中善用 Environment variables](https://youtu.be/JwbI1aNKbtY)
 * [目錄](https://github.com/twtrubiks/docker-tutorial#%E5%A6%82%E4%BD%95%E6%B8%85%E9%99%A4-docker-container-log) - [Youtube Tutorial - 如何清除 Docker container log](https://youtu.be/SiG0tmwhqqg)
 * [目錄](https://github.com/twtrubiks/docker-tutorial#json-file-logging-driver) - [Youtube Tutorial - Docker 中的 JSON File logging driver(container log)](https://youtu.be/wb9bONgnFn4)
-* [目錄](https://github.com/twtrubiks/docker-tutorial#health-check) - Health Check
+* [目錄](https://github.com/twtrubiks/docker-tutorial#health-check) - [(等待新增)Youtube Tutorial - docker 教學 Health Check]()
 
 ## 簡介
 
@@ -966,7 +966,7 @@ docker-compose push
 
 ### docker-compose up/down 和 restart 的差異
 
-* [Youtube Tutorial- docker-compose up/down 和 restart 的差異](https://youtu.be/nX-sbLPz-MU)
+* [Youtube Tutorial - docker-compose up/down 和 restart 的差異](https://youtu.be/nX-sbLPz-MU)
 
 先來談 `docker-compose up/down`,
 
@@ -1123,6 +1123,8 @@ expose 是本機(HOST) 無法被訪問，只有在 containers 中可以被訪問
 
 ## Docker container 內如何連接到本機 localhost 服務
 
+* [Youtube Tutorial - (等待新增)Docker container 內如何連接到本機 localhost 服務]()
+
 ![alt tag](https://i.imgur.com/kQLcALp.png)
 
 假設今天在本機上有一個 A 服務, 他是使用 docker run 起來的,
@@ -1155,6 +1157,14 @@ services:
 ```cmd
 curl http://host.docker.internal:8069
 ```
+
+也可以參考 [docker compose 安裝 pgadmin4](https://github.com/twtrubiks/docker-pgadmin4-tutorial#docker-compose-%E5%AE%89%E8%A3%9D-pgadmin4),
+
+假設今天不考慮使用網路的方法, 如果一個容器 db 是在 5432, 另一個容器是 pgadmin4,
+
+這樣要怎麼透過 pgadmin4 連接到我的本機的 5432 呢😵‍💫
+
+答案就是使用 `host.docker.internal:host-gateway`.
 
 ## Docker Registry
 
@@ -1620,7 +1630,7 @@ lsof -i tcp:5432
 
 docker 的 container log 都會在 `/var/lib/docker/containers` 裡面
 
-( 前提是你使用官方的安裝方法, [Youtube Tutorial-Ubuntu(Linux) 如何安裝 docker](https://youtu.be/eS_HMBC_RaA))
+( 前提是你使用官方的安裝方法, [Youtube Tutorial - Ubuntu(Linux) 如何安裝 docker](https://youtu.be/eS_HMBC_RaA))
 
 如果你是使用 `snap` 安裝 docker, 路徑則會在 `/var/snap/docker/common/var-lib-docker/containers`.
 
@@ -1693,6 +1703,8 @@ docker inspect --format '{{.HostConfig.LogConfig}}' CONTAINER
 這樣設定完之後, 就不用再擔心 container log 吃掉大量的容量了:smile:
 
 ## Health Check
+
+* [(等待新增)Youtube Tutorial - docker 教學 Health Check]()
 
 直接來看一個範例 [docker-compose.yml](https://github.com/twtrubiks/odoo-docker-tutorial/blob/15.0/docker-compose.yml)
 
